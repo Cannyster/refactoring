@@ -9,23 +9,17 @@ function statement(invoice) {
   let result = `Statement for ${invoice.customer}\n`;
   //Acessando o primeiro elemento para que ele seja iterável
 
-  const format = new Intl.NumberFormat("en-us", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-  }).format;
-
   for (let perf of invoice.performances) {
     volumeCredits += volumeCreditsFor(perf);
 
     // exibe a linha para esta requisição
-    result += ` ${playFor(perf).name}: ${format(amountFor(perf) / 100)} (${
-      perf.audience
-    } seats)\n`;
+    result += ` ${playFor(perf).name}: ${formatCurrencyBRL(
+      amountFor(perf) / 100
+    )} (${perf.audience} seats)\n`;
     totalAmount += amountFor(perf);
   }
 
-  result += `Amount owed is ${format(totalAmount / 100)}\n`;
+  result += `Amount owed is ${formatCurrencyBRL(totalAmount / 100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
 }
@@ -66,6 +60,16 @@ function volumeCreditsFor(aPerformance) {
   }
 
   return result;
+}
+
+function formatCurrencyBRL(aNumber) {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    minimumFractionDigits: 2,
+  })
+    .format(aNumber)
+    .replace(/\u00A0/g, " "); // <- substitui o NBSP por espaço comum;
 }
 
 console.log(statement(invoice));

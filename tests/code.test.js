@@ -38,10 +38,10 @@ describe("Função statement", () => {
     const result = statement(invoice);
 
     const expected = `Statement for BigCo
- Hamlet: $650.00 (55 seats)
- As You Like It: $580.00 (35 seats)
- Othello: $500.00 (40 seats)
-Amount owed is $1,730.00
+ Hamlet: R$ 650,00 (55 seats)
+ As You Like It: R$ 580,00 (35 seats)
+ Othello: R$ 500,00 (40 seats)
+Amount owed is R$ 1.730,00
 You earned 47 credits
 `;
 
