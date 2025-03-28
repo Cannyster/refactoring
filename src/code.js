@@ -16,10 +16,7 @@ function statement(invoice) {
     totalAmount += amountFor(perf);
   }
 
-  let volumeCredits = 0;
-  for (let perf of invoice.performances) {
-    volumeCredits += volumeCreditsFor(perf);
-  }
+  let volumeCredits = totalVolumeCredits(invoice);
 
   result += `Amount owed is ${formatCurrencyBRL(totalAmount / 100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
@@ -72,6 +69,14 @@ function formatCurrencyBRL(aNumber) {
   })
     .format(aNumber)
     .replace(/\u00A0/g, " "); // <- substitui o NBSP por espaço comum;
+}
+
+function totalVolumeCredits(invoice) {
+  let total = 0;
+  for (let perf of invoice.performances) {
+    total += volumeCreditsFor(perf);
+  }
+  return total;
 }
 
 console.log(statement(invoice));
