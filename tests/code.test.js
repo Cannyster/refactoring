@@ -1,10 +1,23 @@
-import { statement, playFor, amountFor } from "../src/code.js";
+import {
+  statement,
+  playFor,
+  amountFor,
+  volumeCreditsFor,
+} from "../src/code.js";
 import fs from "fs";
 
 const plays = JSON.parse(fs.readFileSync("./plays.json", "utf-8"));
 const invoice = JSON.parse(fs.readFileSync("./invoice.json", "utf-8"));
 
 describe("Função statement", () => {
+  test("deve trazer o volume de credito da primeira peça", () => {
+    const performance = invoice.performances[0];
+    const result = volumeCreditsFor(performance);
+
+    const expected = 25;
+    expect(result).toBe(expected);
+  });
+
   test("deve trazer o Id da primeira peça", () => {
     const performance = invoice.performances[0];
     const result = playFor(performance).name;

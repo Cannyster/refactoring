@@ -16,7 +16,7 @@ function statement(invoice) {
   }).format;
 
   for (let perf of invoice.performances) {
-    volumeCredits += volumeCreditsFor(perf); // soma os créditos por volume
+    volumeCredits += volumeCreditsFor(perf);
 
     // exibe a linha para esta requisição
     result += ` ${playFor(perf).name}: ${format(amountFor(perf) / 100)} (${
