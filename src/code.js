@@ -6,10 +6,11 @@ const invoice = JSON.parse(fs.readFileSync("./invoice.json", "utf-8"));
 function statement(invoice) {
   let result = `Statement for ${invoice.customer}\n`;
   //Acessando o primeiro elemento para que ele seja iterável
-
-  result += ` ${playFor(perf).name}: ${formatCurrencyBRL(
-    amountFor(perf) / 100
-  )} (${perf.audience} seats)\n`;
+  for (let perf of invoice.performances) {
+    result += ` ${playFor(perf).name}: ${formatCurrencyBRL(amountFor(perf))} (${
+      perf.audience
+    } seats)\n`;
+  }
 
   result += `Amount owed is ${formatCurrencyBRL(calcTotalAmount(invoice))}\n`;
 
