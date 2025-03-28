@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/Cannyster/refactoring/issues"
   },
-  "homepage": "https://github.com/Cannyster/refactoring#readme"
+  "homepage": "https://github.com/Cannyster/refactoring#readme",
+  "devDependencies": {
+    "cypress": "^14.2.1"
+  }
 }
