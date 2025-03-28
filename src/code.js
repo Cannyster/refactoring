@@ -5,7 +5,6 @@ const invoice = JSON.parse(fs.readFileSync("./invoice.json", "utf-8"));
 
 function statement(invoice) {
   let totalAmount = 0;
-  let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
   //Acessando o primeiro elemento para que ele seja iterável
 
@@ -17,6 +16,7 @@ function statement(invoice) {
     totalAmount += amountFor(perf);
   }
 
+  let volumeCredits = 0;
   for (let perf of invoice.performances) {
     volumeCredits += volumeCreditsFor(perf);
   }
