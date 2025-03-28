@@ -16,8 +16,6 @@ function statement(invoice) {
   }).format;
 
   for (let perf of invoice.performances) {
-    let thisAmount = amountFor(perf);
-
     // soma créditos por volume
     volumeCredits += Math.max(perf.audience - 30, 0);
 
@@ -26,10 +24,10 @@ function statement(invoice) {
       volumeCredits += Math.floor(perf.audience / 5);
 
     // exibe a linha para esta requisição
-    result += ` ${playFor(perf).name}: ${format(thisAmount / 100)} (${
+    result += ` ${playFor(perf).name}: ${format(amountFor(perf) / 100)} (${
       perf.audience
     } seats)\n`;
-    totalAmount += thisAmount;
+    totalAmount += amountFor(perf);
   }
 
   result += `Amount owed is ${format(totalAmount / 100)}\n`;
@@ -63,6 +61,6 @@ function playFor(aPerformance) {
   return plays[aPerformance.playId];
 }
 
-console.log(statement(invoice, plays));
+console.log(statement(invoice));
 
 export { statement, playFor, amountFor };
