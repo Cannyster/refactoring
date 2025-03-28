@@ -79,4 +79,11 @@ function totalVolumeCredits(invoice) {
 
 console.log(statement(invoice));
 
-export { statement, playFor, amountFor, volumeCreditsFor };
+export {
+  statement,
+  playFor,
+  amountFor,
+  volumeCreditsFor,
+  formatCurrencyBRL,
+  totalVolumeCredits,
+};
