@@ -8,7 +8,6 @@ function statement(invoice, plays) {
   let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
   //Acessando o primeiro elemento para que ele seja iterável
-  const firstInvoice = invoice[0];
 
   const format = new Intl.NumberFormat("en-us", {
     style: "currency",
@@ -16,7 +15,7 @@ function statement(invoice, plays) {
     minimumFractionDigits: 2,
   }).format;
 
-  for (let perf of firstInvoice.performances) {
+  for (let perf of invoice.performances) {
     const play = plays[perf.playId];
     let thisAmount = amountFor(perf, play);
 
@@ -33,7 +32,7 @@ function statement(invoice, plays) {
     totalAmount += thisAmount;
   }
 
-  result += `Amount owed id ${format(totalAmount / 100)}\n`;
+  result += `Amount owed is ${format(totalAmount / 100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
 }
@@ -61,3 +60,5 @@ function amountFor(aPerformance, play) {
 }
 
 console.log(statement(invoice, plays));
+
+export default statement;
