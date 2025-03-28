@@ -14,7 +14,7 @@ const invoice = JSON.parse(fs.readFileSync("./invoice.json", "utf-8"));
 
 describe("Função statement", () => {
   test("deve trazer o valor formatado em Real Brasileiro", () => {
-    const result = formatCurrencyBRL(65000 / 100);
+    const result = formatCurrencyBRL(65000);
 
     const expected = `R$ 650,00`;
     expect(result).toBe(expected);
