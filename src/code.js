@@ -3,7 +3,7 @@ import fs from "fs";
 const plays = JSON.parse(fs.readFileSync("./plays.json", "utf-8"));
 const invoice = JSON.parse(fs.readFileSync("./invoice.json", "utf-8"));
 
-function statement(invoice, plays) {
+function statement(invoice) {
   let totalAmount = 0;
   let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
@@ -65,4 +65,4 @@ function playFor(aPerformance) {
 
 console.log(statement(invoice, plays));
 
-export default statement;
+export { statement, playFor, amountFor };
