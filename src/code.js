@@ -4,19 +4,15 @@ const plays = JSON.parse(fs.readFileSync("./plays.json", "utf-8"));
 const invoice = JSON.parse(fs.readFileSync("./invoice.json", "utf-8"));
 
 function statement(invoice) {
-  let totalAmount = 0;
   let result = `Statement for ${invoice.customer}\n`;
   //Acessando o primeiro elemento para que ele seja iterável
 
-  for (let perf of invoice.performances) {
-    // exibe a linha para esta requisição
-    result += ` ${playFor(perf).name}: ${formatCurrencyBRL(
-      amountFor(perf) / 100
-    )} (${perf.audience} seats)\n`;
-    totalAmount += amountFor(perf);
-  }
+  result += ` ${playFor(perf).name}: ${formatCurrencyBRL(
+    amountFor(perf) / 100
+  )} (${perf.audience} seats)\n`;
 
-  result += `Amount owed is ${formatCurrencyBRL(totalAmount / 100)}\n`;
+  result += `Amount owed is ${formatCurrencyBRL(calcTotalAmount(invoice))}\n`;
+
   result += `You earned ${totalVolumeCredits(invoice)} credits\n`;
   return result;
 }
@@ -65,7 +61,7 @@ function formatCurrencyBRL(aNumber) {
     currency: "BRL",
     minimumFractionDigits: 2,
   })
-    .format(aNumber)
+    .format(aNumber / 100)
     .replace(/\u00A0/g, " "); // <- substitui o NBSP por espaço comum;
 }
 
@@ -77,6 +73,14 @@ function totalVolumeCredits(invoice) {
   return total;
 }
 
+function calcTotalAmount(invoice) {
+  let result = 0;
+  for (let perf of invoice.performances) {
+    result += amountFor(perf);
+  }
+  return result;
+}
+
 console.log(statement(invoice));
 
 export {
@@ -86,4 +90,5 @@ export {
   volumeCreditsFor,
   formatCurrencyBRL,
   totalVolumeCredits,
+  calcTotalAmount,
 };

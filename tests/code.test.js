@@ -5,6 +5,7 @@ import {
   volumeCreditsFor,
   formatCurrencyBRL,
   totalVolumeCredits,
+  calcTotalAmount,
 } from "../src/code.js";
 import fs from "fs";
 
