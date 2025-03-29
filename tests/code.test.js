@@ -13,6 +13,20 @@ const plays = JSON.parse(fs.readFileSync("./plays.json", "utf-8"));
 const invoice = JSON.parse(fs.readFileSync("./invoice.json", "utf-8"));
 
 describe("Função statement", () => {
+  test("deve trazer o valor total da peça", () => {
+    const result = calcTotalAmount(invoice);
+
+    const expected = 173000;
+    expect(result).toBe(expected);
+  });
+
+  test("deve trazer o valor total de credito", () => {
+    const result = totalVolumeCredits(invoice);
+
+    const expected = 47;
+    expect(result).toBe(expected);
+  });
+
   test("deve trazer o valor formatado em Real Brasileiro", () => {
     const result = formatCurrencyBRL(65000);
 
