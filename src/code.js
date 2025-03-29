@@ -4,18 +4,7 @@ const plays = JSON.parse(fs.readFileSync("./plays.json", "utf-8"));
 const invoice = JSON.parse(fs.readFileSync("./invoice.json", "utf-8"));
 
 function statement(invoice) {
-  let result = `Statement for ${invoice.customer}\n`;
-  //Acessando o primeiro elemento para que ele seja iterável
-  for (let perf of invoice.performances) {
-    result += ` ${playFor(perf).name}: ${formatCurrencyBRL(amountFor(perf))} (${
-      perf.audience
-    } seats)\n`;
-  }
-
-  result += `Amount owed is ${formatCurrencyBRL(calcTotalAmount(invoice))}\n`;
-
-  result += `You earned ${totalVolumeCredits(invoice)} credits\n`;
-  return result;
+  return renderPlainText(invoice, plays);
 }
 
 function amountFor(aPerformance) {
@@ -79,6 +68,20 @@ function calcTotalAmount(invoice) {
   for (let perf of invoice.performances) {
     result += amountFor(perf);
   }
+  return result;
+}
+
+function renderPlainText(invoice) {
+  let result = `Statement for ${invoice.customer}\n`;
+
+  for (let perf of invoice.performances) {
+    result += ` ${playFor(perf).name}: ${formatCurrencyBRL(amountFor(perf))} (${
+      perf.audience
+    } seats)\n`;
+  }
+
+  result += `Amount owed is ${formatCurrencyBRL(calcTotalAmount(invoice))}\n`;
+  result += `You earned ${totalVolumeCredits(invoice)} credits\n`;
   return result;
 }
 
