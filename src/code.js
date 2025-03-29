@@ -3,13 +3,40 @@ import fs from "fs";
 const plays = JSON.parse(fs.readFileSync("./plays.json", "utf-8"));
 const invoice = JSON.parse(fs.readFileSync("./invoice.json", "utf-8"));
 
-function statement(invoice) {
-  return renderPlainText(invoice, plays);
+function statement(invoice, plays) {
+  const statementData = {};
+  statementData.customer = invoice.customer;
+  statementData.performances = invoice.performances.map(enrichPerformance);
+  return renderPlainText(statementData, invoice, plays);
+}
+
+function enrichPerformance(aPerformance) {
+  const result = Object.assign({}, aPerformance);
+  result.play = playFor(result);
+  return result;
+}
+
+function playFor(aPerformance) {
+  return plays[aPerformance.playId];
+}
+
+function renderPlainText(data) {
+  let result = `Statement for ${data.customer}\n`;
+
+  for (let perf of data.performances) {
+    result += ` ${perf.play.name}: ${formatCurrencyBRL(amountFor(perf))} (${
+      perf.audience
+    } seats)\n`;
+  }
+
+  result += `Amount owed is ${formatCurrencyBRL(calcTotalAmount(invoice))}\n`;
+  result += `You earned ${totalVolumeCredits(invoice)} credits\n`;
+  return result;
 }
 
 function amountFor(aPerformance) {
   let result = 0;
-  switch (playFor(aPerformance).type) {
+  switch (aPerformance.play.type) {
     case "tragedy":
       result = 40000;
       if (aPerformance.audience > 30) {
@@ -29,16 +56,12 @@ function amountFor(aPerformance) {
   return result;
 }
 
-function playFor(aPerformance) {
-  return plays[aPerformance.playId];
-}
-
 function volumeCreditsFor(aPerformance) {
   let result = 0;
 
   result += Math.max(aPerformance.audience - 30, 0);
 
-  if ("comedy" === playFor(aPerformance).type) {
+  if ("comedy" === aPerformance.play.type) {
     result += Math.floor(aPerformance.audience / 5);
   }
 
@@ -55,33 +78,19 @@ function formatCurrencyBRL(aNumber) {
     .replace(/\u00A0/g, " "); // <- substitui o NBSP por espaço comum;
 }
 
-function totalVolumeCredits(invoice) {
+function totalVolumeCredits(data) {
   let total = 0;
-  for (let perf of invoice.performances) {
+  for (let perf of data.performances) {
     total += volumeCreditsFor(perf);
   }
   return total;
 }
 
-function calcTotalAmount(invoice) {
+function calcTotalAmount(data) {
   let result = 0;
-  for (let perf of invoice.performances) {
+  for (let perf of data.performances) {
     result += amountFor(perf);
   }
-  return result;
-}
-
-function renderPlainText(invoice) {
-  let result = `Statement for ${invoice.customer}\n`;
-
-  for (let perf of invoice.performances) {
-    result += ` ${playFor(perf).name}: ${formatCurrencyBRL(amountFor(perf))} (${
-      perf.audience
-    } seats)\n`;
-  }
-
-  result += `Amount owed is ${formatCurrencyBRL(calcTotalAmount(invoice))}\n`;
-  result += `You earned ${totalVolumeCredits(invoice)} credits\n`;
   return result;
 }
 
